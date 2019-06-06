@@ -3,7 +3,7 @@ var albumImages = album.getElementsByTagName("img");
 var minPicHeight = 200; var albumMargin ='+@margin.to_s+'; var noPics = 4;
 var containerWidth = album.parentElement.clientWidth;
 var xcoor = 0; var ycoor = 0;
-/*var setHeight = 0;*/'
+/*var setHeight = 0;*/
 for(var i=0;i<albumImages.length;i+=noPics) {
   var currMinHeight = 999999999;
   for(var j=i;j<i+noPics&&j<albumImages.length;j++) {
