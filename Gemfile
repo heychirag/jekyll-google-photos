@@ -12,6 +12,4 @@ gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 gem "nokogiri", "~> 1.10"
 
-gem "image_size", "~> 2.0"
-
 gem "fastimage", "~> 2.1"

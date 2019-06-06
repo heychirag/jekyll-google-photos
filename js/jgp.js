@@ -1,37 +1,56 @@
+var jgp = {};
 var album = document.getElementsByClassName("google-photos-album")[0];
 var albumImages = album.getElementsByTagName("img");
-var minPicHeight = 200; var albumMargin = 5; var noPics = 4;
+var minPicHeight = 150;
+var albumMargin = 7;
+var noPics = 4;
 var containerWidth = album.parentElement.clientWidth;
-var xcoor = 0; var ycoor = 0;
 /*var setHeight = 0;*/
-for(var i=0;i<albumImages.length;i+=noPics) {
-  var currMinHeight = 999999999;
-  for(var j=i;j<i+noPics&&j<albumImages.length;j++) {
-    if(albumImages[j].height<currMinHeight)
-      currMinHeight = albumImages[j].height;
+
+var tryPlace = function(start, end) {
+  var currMaxHeight = 0;
+  for(var j=start;j<=end;j++) {
+    if(albumImages[j].height>currMaxHeight)
+      currMaxHeight = albumImages[j].height;
   }
-  for(var j=i;j<i+noPics&&j<albumImages.length;j++) {
-    albumImages[j].width *= currMinHeight/albumImages[j].height;
-    albumImages[j].height = currMinHeight;
+  for(var j=start;j<=end;j++) {
+    console.log(albumImages[j].width);
+    albumImages[j].width *= currMaxHeight;
+    console.log(albumImages[j].width);
+    albumImages[j].width /= albumImages[j].height;
+    console.log(albumImages[j].width);
+    console.log(albumImages[j].height);
+    albumImages[j].height = currMaxHeight;
+    console.log(albumImages[j].height);
   }
-  var currWidth = (noPics)*albumMargin;
-  for(var j=i;j<i+noPics&&j<albumImages.length;j++) {
+  var currWidth = (start-end)*albumMargin;
+  for(var j=start;j<=end;j++) {
     currWidth += albumImages[j].width;
   }
-  var k; var limitWidth = 0;
-  for(var k=i;k<i+noPics-1&&k<albumImages.length;k++) {
-    albumImages[k].width *= containerWidth/currWidth;
-    limitWidth = limitWidth + albumImages[k].width + albumMargin;
-    albumImages[k].height *= containerWidth/currWidth;
+  //var k; var limitWidth = 0;
+  for(var k=start;k<=end;k++) {
+    albumImages[k].width *= containerWidth;
+    albumImages[k].width /= currWidth;
+    //limitWidth = limitWidth + albumImages[k].width + albumMargin;
+    albumImages[k].height *= containerWidth;
+    albumImages[k].height /= currWidth;
   }
-  albumImages[k].width = containerWidth-limitWidth;
-  albumImages[k].height *= containerWidth/currWidth;
-  /*var setWidth = 0;
-  for(var j=i;j<i+noPics&&j<albumImages.length;j++) {
-    albumImages[j].style.transform = "translate3d($setWidth,$setHeight,0px)";
-    setWidth += albumImages[j].width;
-    setWidth += albumMargin;
-  }
-  setHeight += albumImages[i].height;
-  setHeight += albumMargin;*/
+  //albumImages[k].width = containerWidth-limitWidth;
+  //albumImages[k].height *= containerWidth/currWidth;
+  console.log(albumImages[start].height);
+  return albumImages[start].height;
 }
+
+var startPlace = function() {
+  var start = 0;
+  while(start!=albumImages.length) {
+    end = start+noPics;
+    end = Math.min(end,albumImages.length-1);
+    while(tryPlace(start,end)<minPicHeight&&start!=end) {
+      end--;
+    }
+    start = end+1;
+  }
+}
+
+startPlace();
