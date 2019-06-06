@@ -1,6 +1,6 @@
 var album = document.getElementsByClassName("google-photos-album")[0];
 var albumImages = album.getElementsByTagName("img");
-var minPicHeight = 200; var albumMargin ='+@margin.to_s+'; var noPics = 4;
+var minPicHeight = 200; var albumMargin = 5; var noPics = 4;
 var containerWidth = album.parentElement.clientWidth;
 var xcoor = 0; var ycoor = 0;
 /*var setHeight = 0;*/
