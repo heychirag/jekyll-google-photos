@@ -8,76 +8,193 @@ module JekyllGooglePhotos
   class Tag < Liquid::Tag
     def initialize(tagName, url, tokens)
       super
-      @url = url
-
-      @doc = Nokogiri::HTML(open(@url.strip).read)
-
-      @scripts = @doc.xpath("//script")
-
-      for $x in @scripts do
-        if $x.inner_html.match(/initDataCallback\(/)
-          @jsonString = $x.inner_html
-          @jsonString = @jsonString.sub(/.*function\(\)\{return /,"")
-          @jsonString["\n}});"] = ""
-        end
-      end
-
-      @json = JSON.parse(@jsonString)
-      @imgChildren = @json[1]
-      @margin = 5;
-      @imgDOMS = %Q{<div class="google-photos-album" style="position:relative;margin-left:-#{@margin}px;margin-top:-#{@margin}px;">}
-      for $x in @imgChildren do
-        @dims = FastImage.size($x[1][0]);
-        @imgDOMS += (%Q{<img src="#{$x[1][0]}" width="#{@dims[0]}" height="#{@dims[1]}" style="margin-left:#{@margin}px;margin-top:#{@margin}px;" />})
-        puts $x[1][0]
-      end
-      @imgDOMS += %Q{</div>}
-      $jsAddress = 'https://raw.githubusercontent.com/heychirag/jekyll-google-photos/master/js/jgp.js'
-      @imgDOMS += %Q{<script>#{Net::HTTP.get(URI.parse($jsAddress))}</script>}
+      @small = 400
+      @medium = 800
+      @large = 1400
+      @tolerance = 200
+      @imgLinks = getImageLinks(url)
+      @dom = createPSWPElem()
+      @dom += addScript()
     end
 
-    def insertScript
-      #result = 'var album = document.getElementsByClassName("google-photos-album")[0];'
-      #result += 'var albumImages = album.getElementsByTagName("img");'
-      #result += 'var minPicHeight = 200; var albumMargin ='+@margin.to_s+'; var noPics = 4;'
-      #result += 'var containerWidth = album.parentElement.clientWidth;'
-      #result += 'var xcoor = 0; var ycoor = 0;'
-      #result += '/*var setHeight = 0;*/'
-      #result += 'for(var i=0;i<albumImages.length;i+=noPics) {'
-      #result += 'var currMinHeight = 999999999;'
-      #result += 'for(var j=i;j<i+noPics&&j<albumImages.length;j++) {'
-      #result += 'if(albumImages[j].height<currMinHeight)'
-      #result += 'currMinHeight = albumImages[j].height;'
-      #result += '}'
-      #result += 'for(var j=i;j<i+noPics&&j<albumImages.length;j++) {'
-      #result += 'albumImages[j].width *= currMinHeight/albumImages[j].height;'
-      #result += 'albumImages[j].height = currMinHeight;'
-      #result += '}'
-      #result += 'var currWidth = (noPics)*albumMargin;'
-      #result += 'for(var j=i;j<i+noPics&&j<albumImages.length;j++) {'
-      #result += 'currWidth += albumImages[j].width;'
-      #result += '}'
-      #result += 'var k; var limitWidth = 0;'
-      #result += 'for(var k=i;k<i+noPics-1&&k<albumImages.length;k++) {'
-      #result += 'albumImages[k].width *= containerWidth/currWidth;'
-      #result += 'limitWidth = limitWidth + albumImages[k].width + albumMargin;'
-      #result += 'albumImages[k].height *= containerWidth/currWidth;'
-      #result += '}'
-      #result += 'albumImages[k].width = containerWidth-limitWidth;'
-      #result += 'albumImages[k].height *= containerWidth/currWidth;'
-      #result += '/*var setWidth = 0;'
-      #result += 'for(var j=i;j<i+noPics&&j<albumImages.length;j++) {'
-      #result += 'albumImages[j].style.transform = "translate3d($setWidth,$setHeight,0px)";'
-      #result += 'setWidth += albumImages[j].width;'
-      #result += 'setWidth += albumMargin;'
-      #result += '}'
-      #result += 'setHeight += albumImages[i].height;'
-      #result += 'setHeight += albumMargin;*/'
-      #result += '}'
+    def getImageLinks(url)
+      doc = Nokogiri::HTML(open(url.strip).read)
+      scripts = doc.xpath("//script")
+      for x in scripts do
+        if x.inner_html.match(/initDataCallback\(/)
+          jsonString = x.inner_html
+          jsonString = jsonString.sub(/.*function\(\)\{return /,"")
+          jsonString["\n}});"] = ""
+        end
+      end
+      json = JSON.parse(jsonString)
+      return json[1]
+    end
+
+    def createPSWPElem()
+      elem = %Q{<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+      <!-- Background of PhotoSwipe.
+           It's a separate element as animating opacity is faster than rgba(). -->
+      <div class="pswp__bg"></div>
+      <!-- Slides wrapper with overflow:hidden. -->
+      <div class="pswp__scroll-wrap">
+          <!-- Container that holds slides.
+              PhotoSwipe keeps only 3 of them in the DOM to save memory.
+              Don't modify these 3 pswp__item elements, data is added later on. -->
+          <div class="pswp__container">
+              <div class="pswp__item"></div>
+              <div class="pswp__item"></div>
+              <div class="pswp__item"></div>
+          </div>
+          <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+          <div class="pswp__ui pswp__ui--hidden">
+              <div class="pswp__top-bar">
+                  <!--  Controls are self-explanatory. Order can be changed. -->
+                  <div class="pswp__counter"></div>
+                  <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                  <button class="pswp__button pswp__button--share" title="Share"></button>
+                  <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                  <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                  <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                  <!-- element will get class pswp__preloader--active when preloader is running -->
+                  <div class="pswp__preloader">
+                      <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                          <div class="pswp__preloader__donut"></div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                  <div class="pswp__share-tooltip"></div>
+              </div>
+              <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+              </button>
+              <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+              </button>
+              <div class="pswp__caption">
+                  <div class="pswp__caption__center"></div>
+              </div>
+          </div>
+      </div>
+  </div>}
+      return elem
+    end
+
+    def addScript()
+      sp = %Q{<script>}
+      sp += %Q{var pswpElement = document.querySelectorAll('.pswp')[0];}
+      sp += addImages()
+      sp += addOptions()
+      sp += %Q{var GPGallery = new PhotoSwipe(pswpElement,
+                                              PhotoSwipeUI_Default,
+                                              GPImages, GPOptions);}
+      sp += responsiveImages()
+      sp += %Q{GPGallery.init()}
+      sp += %Q{</script>}
+      return sp
+    end
+
+    def addOptions()
+      sp = %Q{var GPOptions = [}
+      sp += %Q{];}
+      return sp
+    end
+
+    def addImages()
+      sp = %Q{var GPImages = [}
+      for x in @imgLinks
+        smallLink = x[1][0] + %Q{=w#{@small}}
+        smallDims = FastImage.size(smallLink);
+        medLink = x[1][0] + %Q{=w#{@medium}}
+        medDims = FastImage.size(medLink)
+        larLink = x[1][0] + %Q{=w#{@large}}
+        larDims = FastImage.size(larLink)
+        puts smallLink
+        puts medLink
+        puts larLink
+        sp += %Q{\{
+                    small: \{
+                      src: '#{smallLink}',
+                      w: #{smallDims[0]},
+                      h: #{smallDims[1]}
+                    \},
+                    medium: \{
+                      src: '#{medLink}',
+                      w: #{medDims[0]},
+                      h: #{medDims[1]}
+                    \},
+                    large: \{
+                      src: '#{larLink}',
+                      w: #{larDims[0]},
+                      h: #{larDims[1]}
+                    \}
+                  \},}
+      end
+      sp += %Q{];}
+      return sp
+    end
+
+    def responsiveImages()
+      sp = %Q{
+      var realViewportWidth,
+      useLarge = false,
+      useMedium = false,
+      firstResize = true,
+      imageSrcWillChange;
+      GPGallery.listen('beforeResize', function() \{
+        realViewportWidth = GPGallery.viewportSize.x * window.devicePixelRatio;
+        if(useLarge && !useMedium &&realViewportWidth >= #{@small+@tolerance}) \{
+          useLarge = false;
+          useMedium = true;
+          imageSrcWillChange = true;
+        \}
+        else if(!useLarge && useMedium && realViewportWidth >= #{@medium+@tolerance}) \{
+          useLarge = true;
+          useMedium = false;
+          imageSrcWillChange = true;
+        \}
+        else \{
+          useMedium = false;
+          useLarge = false;
+          imageSrcWillChange = true;
+        \}
+
+      if(imageSrcWillChange && !firstResize) \{
+        gallery.invalidateCurrItems();
+      \}
+
+      if(firstResize) \{
+        firstResize = false;
+      \}
+
+      imageSrcWillChange = false;
+
+      \});
+
+      GPGallery.listen('gettingData', function(index, item) \{
+        if(useLarge) \{
+          item.src = item.large.src;
+          item.w = item.large.w;
+          item.h = item.large.h;
+        \}
+        else if (useMedium) \{
+          item.src = item.medium.src;
+          item.w = item.medium.w;
+          item.h = item.medium.h;
+        \}
+        else \{
+          item.src = item.small.src;
+          item.w = item.small.w;
+          item.h = item.small.h;
+        \}
+      \});
+      }
+      return sp
     end
 
     def render(context)
-      "#{@imgDOMS}"
+      "#{@dom}"
     end
   end
 end
