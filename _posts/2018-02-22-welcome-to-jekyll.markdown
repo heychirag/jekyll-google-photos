@@ -4,8 +4,10 @@ title:  "Welcome to Jekyll!"
 date:   2018-02-22 18:29:32 +0000
 categories: jekyll update
 ---
+{% google_photos_css %}
+{% google_photos_js %}
 
-{% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 %}
+{% google_photos https://photos.app.goo.gl/XU5RFEJVGW1LLudq6 %}
 
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
