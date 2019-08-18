@@ -24,13 +24,18 @@ plugins:
 
 # Usage:
 ```
-{% google_photos <link_to_album> row_height row_height_tablet row_height_phone tablet_max phone_max margin %}
+{% google_photos <link_to_album> <row_height> <row_height_tablet> <row_height_phone> <tablet_max> <phone_max margin> %}
 ```
 `row_height`: Row height on the biggest screen (in pixels)
+
 `row_height_tablet`: Row height on tablets (in pixels)
+
 `row_height_phone`: Row height on phones (in pixels)
-`tablet_max`: Width below which `row_height_tablet` will be used (in pixels)
-`phone_max`: Width below which `row_height_phone` will be used (in pixels)
+
+`tablet_max`: Screen-Width below which `row_height_tablet` will be used (in pixels)
+
+`phone_max`: Screen-Width below which `row_height_phone` will be used (in pixels)
+
 `margin`: space or margin between rows and adjacent photos
 
 Example:
