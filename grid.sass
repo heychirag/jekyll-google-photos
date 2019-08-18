@@ -1,0 +1,115 @@
+// Default variables that can be overrided
+$flexbin-row-height: 300px !default;
+$flexbin-space: 5px !default;
+
+$flexbin-phone-max: 300px !default;
+$flexbin-row-height-phone: 75px !default;
+$flexbin-space-phone: $flexbin-space !default;
+
+$a-max: 450px !default;
+$a-height: 112px !default;
+
+$b-max: 600px !default;
+$b-height: 150px !default;
+
+$c-max: 750px !default;
+$c-height: 175px !default;
+
+$d-max: 900px !default;
+$d-height: 175px !default;
+
+$e-max: 1050px !default;
+$e-height: 175px !default;
+
+$f-max: 1200px !default;
+$f-height: 180px !default;
+
+$g-max: 1350px !default;
+$g-height: 185px !default;
+
+$h-max: 1500px !default;
+$h-height: 200px !default;
+
+$i-max: 1650px !default;
+$i-height: 210px !default;
+
+$j-max: 1800px !default;
+$j-height: 225px !default;
+
+$k-max: 1950px !default;
+$k-height: 240px !default;
+
+$l-max: 2100px !default;
+$l-height: 250px !default;
+
+// Minxin for customize multiple Flexbin layout
+// For example, 300px height for desktop devices, 150px height for mobile devices
+@mixin flexbin($row-height, $space) {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
+    margin: - $space / 2;
+
+    // Let final row align left fit if images are not enough to fill
+    // If the gap is very small, fill the final row
+    &:after {
+        content: '';
+        flex-grow: 999999999; // avoid final row zoom too much to fit width
+        min-width: $row-height; // avoid small gap in final row (< $row-height)
+        height: 0;
+    }
+
+    > * {
+        position: relative;
+        display: block;
+        height: $row-height;
+        margin: $space / 2;
+        flex-grow: 1;
+
+        > img {
+            height: $row-height;
+            object-fit: cover;
+            max-width: 100%;
+            min-width: 100%;
+            vertical-align: bottom;
+        }
+    }
+
+
+    // Add margin around flexbin gallery
+    // Visual margin is the same with space between rows
+    &.flexbin-margin {
+        margin: $space / 2;
+    }
+}
+
+// CSS class for basic usage
+.flexbin {
+    // Desktop devices
+    @include flexbin($flexbin-row-height, $flexbin-space);
+
+    // Tablet devices
+
+    // Phone devices
+    @media (max-width: $flexbin-phone-max) {
+        @include flexbin($flexbin-row-height-phone, $flexbin-space-phone);
+    }
+    @media (min-width: $flexbin-phone-max) and (max-width: $a-max) {
+        @include flexbin($a-height, $flexbin-space-phone);
+    }
+    @media (min-width: $a-max) and (max-width: $b-max) {
+        @include flexbin($b-height, $flexbin-space-phone);
+    }
+    @media (min-width: $b-max) and (max-width: $c-max) {
+        @include flexbin($c-height, $flexbin-space-phone);
+    }
+    @media (min-width: $c-max) and (max-width: $d-max) {
+        @include flexbin($d-height, $flexbin-space-phone);
+    }
+    @media (min-width: $d-max) and (max-width: $e-max) {
+        @include flexbin($e-height, $flexbin-space-phone);
+    }
+    @media (min-width: $e-max) {
+        @include flexbin($f-height, $flexbin-space-phone);
+    }
+}
