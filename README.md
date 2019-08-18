@@ -6,12 +6,12 @@
 
 # Installing
 
-add the following to your plugins in `_config.yml`:
+Install the gem using:
 ```
-- jekyll-google-photos
+gem install jekyll-google-photos
 ```
 
-Install the gem using bundle or use the regular gem installation method
+Or use the following if you are using bundler
 ```
 bundle add jekyll-google-photos
 ```
@@ -24,23 +24,13 @@ plugins:
 
 # Usage:
 ```
-{% google_photos <link_to_album> <row_height> <row_height_tablet> <row_height_phone> <tablet_max> <phone_max margin> %}
+{% google_photos <link_to_album> <max_width> %}
 ```
-`row_height`: Row height on the biggest screen (in pixels)
-
-`row_height_tablet`: Row height on tablets (in pixels)
-
-`row_height_phone`: Row height on phones (in pixels)
-
-`tablet_max`: Screen-Width below which `row_height_tablet` will be used (in pixels)
-
-`phone_max`: Screen-Width below which `row_height_phone` will be used (in pixels)
-
-`margin`: space or margin between rows and adjacent photos
+`max_width`: Max width of the image loaded from Google servers for the gallery. Larger widths may increase page load time.
 
 Example:
 ```
-{% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 300 150 100 1280 400 5 %}
+{% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 800 %}
 ```
 
 # Features to implement
