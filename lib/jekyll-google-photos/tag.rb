@@ -1,7 +1,6 @@
 require "jekyll"
 require 'open-uri'
 require 'nokogiri'
-require 'fastimage'
 require 'net/http'
 
 module JekyllGooglePhotos

@@ -1,3 +1,3 @@
 module JekyllGooglePhotos
-  VERSION = "1.0.1".freeze
+  VERSION = "1.0.3".freeze
 end
