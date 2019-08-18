@@ -9,14 +9,7 @@ module JekyllGooglePhotos
       super
       args = args.split(" ")
       url = args[0]
-      @row_height = args[1].to_i
-      @space = args[6].to_i
-      @tablet_max = args[4].to_i
-      @row_height_tablet = args[2].to_i
-      @space_tablet = @space
-      @phone_max = args[5].to_i
-      @row_height_phone = args[3].to_i
-      @space_phone = @space
+      @maxWidth = args[1]
       @imgLinks = getImageLinks(url)
       @dom = createDOM()
     end
@@ -37,97 +30,253 @@ module JekyllGooglePhotos
 
     def flexbinCSS()
       elem = %Q{
-                  .flexbin {
-                       display: flex;
-                       overflow: hidden;
-                       flex-wrap: wrap;
-                       margin: -#{@space/2.0}px;
-                  }
-                   .flexbin:after {
-                       content: '';
-                       flex-grow: 999999999;
-                       min-width: #{@row_height}px;
-                       height: 0;
-                  }
-                   .flexbin > * {
-                       position: relative;
-                       display: block;
-                       height: #{@row_height}px;
-                       margin: #{@space/2.0}px;
-                       flex-grow: 1;
-                  }
-                   .flexbin > * > img {
-                       height: #{@row_height}px;
-                       object-fit: cover;
-                       max-width: 100%;
-                       min-width: 100%;
-                       vertical-align: bottom;
-                  }
-                   .flexbin.flexbin-margin {
-                       margin: #{@space/2.0}px;
-                  }
-                   @media (max-width: #{@tablet_max}px) {
-                       .flexbin {
-                           display: flex;
-                           overflow: hidden;
-                           flex-wrap: wrap;
-                           margin: -#{@space/2.0}px;
-                      }
-                       .flexbin:after {
-                           content: '';
-                           flex-grow: 999999999;
-                           min-width: #{@row_height_tablet}px;
-                           height: 0;
-                      }
-                       .flexbin > * {
-                           position: relative;
-                           display: block;
-                           height: #{@row_height_tablet}px;
-                           margin: #{@space/2.0}px;
-                           flex-grow: 1;
-                      }
-                       .flexbin > * > img {
-                           height: #{@row_height_tablet}px;
-                           object-fit: cover;
-                           max-width: 100%;
-                           min-width: 100%;
-                           vertical-align: bottom;
-                      }
-                       .flexbin.flexbin-margin {
-                           margin: #{@space/2.0}px;
-                      }
-                  }
-                   @media (max-width: #{@phone_max}px) {
-                       .flexbin {
-                           display: flex;
-                           overflow: hidden;
-                           flex-wrap: wrap;
-                           margin: -#{@space/2.0}px;
-                      }
-                       .flexbin:after {
-                           content: '';
-                           flex-grow: 999999999;
-                           min-width: #{@row_height_phone}px;
-                           height: 0;
-                      }
-                       .flexbin > * {
-                           position: relative;
-                           display: block;
-                           height: #{@row_height_phone}px;
-                           margin: #{@space/2.0}px;
-                           flex-grow: 1;
-                      }
-                       .flexbin > * > img {
-                           height: #{@row_height_phone}px;
-                           object-fit: cover;
-                           max-width: 100%;
-                           min-width: 100%;
-                           vertical-align: bottom;
-                      }
-                       .flexbin.flexbin-margin {
-                           margin: #{@space/2.0}px;
-                      }
-                  }
+        .flexbin {
+             display: flex;
+             overflow: hidden;
+             flex-wrap: wrap;
+             margin: -2.5px;
+        }
+         .flexbin:after {
+             content: "";
+             flex-grow: 999999999;
+             min-width: 300px;
+             height: 0;
+        }
+         .flexbin > * {
+             position: relative;
+             display: block;
+             height: 300px;
+             margin: 2.5px;
+             flex-grow: 1;
+        }
+         .flexbin > * > img {
+             height: 300px;
+             object-fit: cover;
+             max-width: 100%;
+             min-width: 100%;
+             vertical-align: bottom;
+        }
+         .flexbin.flexbin-margin {
+             margin: 2.5px;
+        }
+         @media (max-width: 300px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 75px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 75px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 75px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 600px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 900px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 1200px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 1500px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 1800px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+         @media (max-width: 2100px) {
+             .flexbin {
+                 display: flex;
+                 overflow: hidden;
+                 flex-wrap: wrap;
+                 margin: -2.5px;
+            }
+             .flexbin:after {
+                 content: "";
+                 flex-grow: 999999999;
+                 min-width: 150px;
+                 height: 0;
+            }
+             .flexbin > * {
+                 position: relative;
+                 display: block;
+                 height: 150px;
+                 margin: 2.5px;
+                 flex-grow: 1;
+            }
+             .flexbin > * > img {
+                 height: 150px;
+                 object-fit: cover;
+                 max-width: 100%;
+                 min-width: 100%;
+                 vertical-align: bottom;
+            }
+             .flexbin.flexbin-margin {
+                 margin: 2.5px;
+            }
+        }
+
 
       }
       return elem
@@ -144,9 +293,9 @@ module JekyllGooglePhotos
     def addImages()
       sp = %Q{<div class="flexbin">}
       for x in @imgLinks
-        link = x[1][0] + %Q{=w#{@tablet_max}}
+        link = x[1][0] + "=w#{@maxWidth}"
         sp += %Q{
-                  <a href="#{x[1][0]}">
+                  <a href="#{x[1][0] + "=w0"}">
                       <img src="#{link}" />
                   </a>
         }
