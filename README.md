@@ -6,16 +6,15 @@
 
 # Installing
 
-add the following to your Gemfile:
+add the following to your plugins in `_config.yml`:
 ```
-gem 'jekyll-google-photos'
+- jekyll-google-photos
 ```
 
-then:
+Install the gem using bundle or use the regular gem installation method
 ```
-bundle install
+bundle add jekyll-google-photos
 ```
-Note: Simplified installation is still a WIP
 
 You also need to add this plugin to your `_config.yml` file:
 ```
