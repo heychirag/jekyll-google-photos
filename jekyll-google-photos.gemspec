@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.summary       = "Embedd Google Photos Album to your Jekyll Site"
   spec.description   = "Embedd Google Photos Album to your Jekyll Site"
   spec.version       = JekyllGooglePhotos::VERSION
-  spec.authors       = ["heychirag"]
-  spec.email         = ["i@chira.ga"]
+  spec.authors       = ["Chirag Arora"]
+  spec.email         = ["me@chia.ro"]
   spec.homepage      = "https://github.com/heychirag/jekyll-google-photos"
   spec.licenses      = ["MIT"]
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r!^(test|spec|features)/!)  }
@@ -17,5 +17,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "rubocop", "~> 0.52"
   spec.add_development_dependency "nokogiri", "~> 1.10"
-  spec.add_development_dependency "fastimage", "~> 2.1"
 end
