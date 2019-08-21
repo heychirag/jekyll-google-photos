@@ -1,7 +1,7 @@
 
 # Jekyll Google Photos
 
-> 💎 Embedd Google Photos Album to your Jekyll Site
+> 💎 Embed Google Photos Album to your Jekyll Site
 
 [Check out the Demo](http://chira.ga/trip-to-annecy/)
 
@@ -33,6 +33,9 @@ Example:
 ```
 {% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 800 %}
 ```
+#### Note
+You can use `0` to get original quality image.
+
 # Want to Display images your way?
 
 Pass `none` into `max_width`. Passing `none` will not display any image. You can now use image urls to display images in any desired way.
@@ -43,7 +46,7 @@ The image URLs are present in the following array inside the `googlePhotos` obje
 ```
 googlePhotos.urls = ["img1","img2",...];
 ```
-##### Note
+#### Note
 Image urls will always be available at `googlePhotos.urls` irrespective of what is passed in `max_width`.
 
 ### Hacking the Image URLs
@@ -98,6 +101,10 @@ https://lh3.googleusercontent.com/p/AF....VnnY<b>=w256-h256-c</b>
 </td>
 </tr>
 </table>
+
+#### Note
+You can use `=w0-h0` for unaltered image quality.
+
 
 # Features to implement
 
