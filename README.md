@@ -33,6 +33,12 @@ Example:
 ```
 {% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 800 %}
 ```
+or using variables/front matter
+
+```
+{% google_photos post.gallery_url 800 %}
+```
+
 #### Note
 You can use `0` to get original quality image.
 

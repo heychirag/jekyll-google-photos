@@ -8,10 +8,8 @@ module JekyllGooglePhotos
     def initialize(tagName, args, tokens)
       super
       args = args.split(" ")
-      url = args[0]
+      @albumUrl = args[0]
       @maxWidth = args[1]
-      @imgLinks = getImageLinks(url)
-      @dom = createDOM()
     end
 
     def getImageLinks(url)
@@ -337,7 +335,12 @@ module JekyllGooglePhotos
     end
 
     def render(context)
-      @dom
+      if @albumUrl[/https?:\/\/[\S]+/]
+        @imgLinks = getImageLinks(@albumUrl)
+      else
+        @imgLinks = getImageLinks("#{context[@albumUrl.strip]}")
+      end
+      createDOM()
     end
   end
 end
