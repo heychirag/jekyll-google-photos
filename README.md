@@ -111,6 +111,20 @@ https://lh3.googleusercontent.com/p/AF....VnnY<b>=w256-h256-c</b>
 #### Note
 You can use `=w0-h0` for unaltered image quality.
 
+# Error using this plugin with Github pages?
+
+A lot of users are experiencing issues when using this plugin with Github pages.
+
+#### Reason
+
+Github only supports a limited number of Ruby gems.
+
+https://stackoverflow.com/questions/53215356/jekyll-how-to-use-custom-plugins-with-github-pages
+
+#### Solution
+
+ - Try building locally and then push contents of `_site` to your repository.
+ - Try other static site builders. Gitlab pages is a good alternative.
 
 # Features to implement
 
