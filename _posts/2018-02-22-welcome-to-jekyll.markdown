@@ -3,6 +3,9 @@ layout: post
 title:  "Welcome to Jekyll!"
 date:   2018-02-22 18:29:32 +0000
 categories: jekyll update
+gallery_urls:
+  - https://photos.app.goo.gl/bhWukds8QVodFU246
+  - https://photos.app.goo.gl/bhWukds8QVodFU246
 ---
 
 {% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 800 %}
