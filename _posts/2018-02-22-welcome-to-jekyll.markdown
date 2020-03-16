@@ -6,9 +6,18 @@ categories: jekyll update
 gallery_urls:
   - https://photos.app.goo.gl/bhWukds8QVodFU246
   - https://photos.app.goo.gl/bhWukds8QVodFU246
+album_settings:
+  delay: 5
+  title: "Trip to Annecy"
+  image_width: 0
+  image_height: 0
+  frame_height: "200px"
+  frame_width: "300px"
 ---
 
-{% google_photos https://photos.app.goo.gl/bhWukds8QVodFU246 800 %}
+{% google_photos page.gallery_urls page.album_settings %}
+
+{% google_photos page.gallery_urls page.album_settings %}
 
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 

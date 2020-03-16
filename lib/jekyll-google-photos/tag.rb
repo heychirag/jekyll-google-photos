@@ -3,6 +3,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'net/http'
 require_relative 'css'
+require_relative 'js'
 
 module JekyllGooglePhotos
   class Tag < Liquid::Tag
@@ -10,7 +11,7 @@ module JekyllGooglePhotos
       super
       args = args.split(" ")
       @albumUrls = args[0]
-      @maxWidth = args[1]
+      @albumSettings = args[1]
     end
 
     def getImageLinks(url)
@@ -41,31 +42,33 @@ module JekyllGooglePhotos
       return sp
     end
 
-    def createDOM()
+    def createDOM(albumSettings)
       sp = "<script>"
       sp += "googlePhotos = {};"
       sp += URLsInJSON()
       sp += "</script>"
-      if(@maxWidth != "none")
-        sp += %Q{<style>}
-        sp += flexbinCSS()
-        sp += %Q{</style>}
-        sp += addImages()
+      puts albumSettings
+      if(albumSettings != "none")
+        sp += JekyllGooglePhotos::PublicalbumJS()
+        sp += addImages(albumSettings)
       end
       return sp
     end
-
-    def addImages()
-      sp = %Q{<div class="flexbin">}
-      idx = 0
+    
+    def imageObject(url)
+      sp = %Q{
+        <object data="#{url}=w#{@maxWidth}"></object>
+      }
+      return sp
+    end
+    
+    def addImages(albumSettings)
+      sp = %Q{<div class="pa-gallery-player-widget" style="width:#{albumSettings["frame_width"]}; height:#{albumSettings["frame_height"]}; display:none;"
+          data-title="#{albumSettings["title"]}"
+          data-delay="#{albumSettings["delay"]}">
+      }
       for x in @imgLinks
-        link = x + "=w#{@maxWidth}"
-        sp += %Q{
-                  <div onclick="showSlides(#{idx});" class="slideImgs">
-                      <img src="#{link}" />
-                  </div>
-        }
-        idx += 1
+        sp += %Q{<object data="#{x}=w#{albumSettings["image_width"]}-h#{albumSettings["image_height"]}"></object>}
       end
       sp += %Q{</div>}
       return sp
@@ -87,7 +90,10 @@ module JekyllGooglePhotos
             @imgLinks.push(link[1][0])
           end
       end
-      createDOM()
+      if @albumSettings != "none"
+        albumSettings = context[@albumSettings.strip]
+      end
+      createDOM(albumSettings)
     end
   end
 end
