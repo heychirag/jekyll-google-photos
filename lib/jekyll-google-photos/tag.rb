@@ -17,15 +17,14 @@ module JekyllGooglePhotos
     def getImageLinks(url)
       doc = Nokogiri::HTML(open(url.strip).read)
       scripts = doc.xpath("//script")
+      jsonString = ""
       for x in scripts do
         if x.inner_html.match(/initDataCallback\(/)
           jsonString = x.inner_html
-          jsonString = jsonString.sub(/.*function\(\)\{return /,"")
-          jsonString["\n}});"] = ""
+          jsonString = jsonString.scan(/\[\"(http.*googleusercontent.com\/[^((?!\/a\/).)*$].*)\"/)
         end
       end
-      json = JSON.parse(jsonString)
-      return json[1]
+      return jsonString
     end
 
     def flexbinCSS()
@@ -34,11 +33,10 @@ module JekyllGooglePhotos
     end
 
     def URLsInJSON()
-      sp = "googlePhotos.urls = ["
-      for x in @imgLinks
-        sp += "\"#{x}\","
-      end
-      sp += "];"
+      sp = 'googlePhotos.urls = ["'
+      newImgLinks = @imgLinks.uniq.join('", "')
+      sp += "#{newImgLinks}"
+      sp += '"];'
       return sp
     end
 
@@ -47,11 +45,11 @@ module JekyllGooglePhotos
       sp += "googlePhotos = {};"
       sp += URLsInJSON()
       sp += "</script>"
-      puts albumSettings
-      if(albumSettings != "none")
-        sp += JekyllGooglePhotos::PublicalbumJS()
-        sp += addImages(albumSettings)
-      end
+      #puts albumSettings
+      ##if(albumSettings != "none")
+        ##sp += JekyllGooglePhotos::PublicalbumJS()
+        ##sp += addImages(albumSettings)
+      ##end
       return sp
     end
     
@@ -86,10 +84,11 @@ module JekyllGooglePhotos
       end
       for albumUrl in albumUrls
           imageLinks = getImageLinks(albumUrl)
+          #puts imageLinks[0]
           for link in imageLinks
-            @imgLinks.push(link[1][0])
+            @imgLinks.push(link)
           end
-      end
+      end 
       if @albumSettings != "none"
         albumSettings = context[@albumSettings.strip]
       end
