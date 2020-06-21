@@ -2,8 +2,6 @@ require "jekyll"
 require 'open-uri'
 require 'nokogiri'
 require 'net/http'
-require_relative 'css'
-require_relative 'js'
 
 module JekyllGooglePhotos
   class Tag < Liquid::Tag
@@ -27,11 +25,6 @@ module JekyllGooglePhotos
       return jsonString
     end
 
-    def flexbinCSS()
-      elem = JekyllGooglePhotos::FlexbinCSS()
-      return elem
-    end
-
     def URLsInJSON()
       sp = 'googlePhotos.urls = ["'
       newImgLinks = @imgLinks.uniq.join('", "')
@@ -45,11 +38,6 @@ module JekyllGooglePhotos
       sp += "googlePhotos = {};"
       sp += URLsInJSON()
       sp += "</script>"
-      #puts albumSettings
-      ##if(albumSettings != "none")
-        ##sp += JekyllGooglePhotos::PublicalbumJS()
-        ##sp += addImages(albumSettings)
-      ##end
       return sp
     end
     
@@ -60,18 +48,6 @@ module JekyllGooglePhotos
       return sp
     end
     
-    def addImages(albumSettings)
-      sp = %Q{<div class="pa-gallery-player-widget" style="width:#{albumSettings["frame_width"]}; height:#{albumSettings["frame_height"]}; display:none;"
-          data-title="#{albumSettings["title"]}"
-          data-delay="#{albumSettings["delay"]}">
-      }
-      for x in @imgLinks
-        sp += %Q{<object data="#{x}=w#{albumSettings["image_width"]}-h#{albumSettings["image_height"]}"></object>}
-      end
-      sp += %Q{</div>}
-      return sp
-    end
-
     def render(context)
       @imgLinks = []
       if @albumUrls[/https?:\/\/[\S]+/]
@@ -84,7 +60,6 @@ module JekyllGooglePhotos
       end
       for albumUrl in albumUrls
           imageLinks = getImageLinks(albumUrl)
-          #puts imageLinks[0]
           for link in imageLinks
             @imgLinks.push(link)
           end
