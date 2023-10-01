@@ -19,7 +19,7 @@ module JekyllGooglePhotos
       for x in scripts do
         if x.inner_html.match(/initDataCallback\(/)
           jsonString = x.inner_html
-          jsonString = jsonString.scan(/\[\"(http.*googleusercontent.com\/[^((?!\/a\/).)*$].*)\"/)
+          jsonString = jsonString.scan(/\[\"(https:\/\/\w+?\.googleusercontent\.com\/[^((?!\/a\/).)*$].+?)\"/)
         end
       end
       return jsonString
